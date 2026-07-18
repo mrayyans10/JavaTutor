@@ -7,7 +7,7 @@
 const CONCEPT_PATTERNS: Record<string, RegExp> = {
   "class structure": /\bclass\s+\w+/i,
   "main method": /public\s+static\s+void\s+main/,
-  "System.out.println": /System\.out\.println/,
+  "system.out.println": /System\.out\.println/,
   comments: /\/\/|\/\*/,
   "variable declaration": /\b(int|double|float|long|short|byte|boolean|char|String)\s+\w+\s*=/,
   "variable assignment": /\w+\s*=\s*[^=;]+;/,

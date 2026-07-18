@@ -105,7 +105,7 @@ public class ClassName {
 }`,
         expectedBehaviour:
           "When run, the program should print two separate lines of text to the console, with no error messages. For example, it could print \"Annual Sports Day\" on the first line and \"School Main Ground\" on the second line.",
-        conceptsTested: ["class structure", "main method", "System.out.println", "comments"],
+        conceptsTested: ["class structure", "main method", "System.out.println"],
         difficulty: "beginner",
       },
       followUpPrompts: [
