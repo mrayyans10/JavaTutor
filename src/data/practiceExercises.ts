@@ -547,6 +547,291 @@ export const practiceExerciseBank: Record<string, Exercise[]> = {
     },
   ],
 
+  "module-2-boolean-expressions": [
+    {
+      id: "module-2-boolean-expressions-practice-2",
+      title: "Check Three Library Facts",
+      instructions:
+        "Given a book's total copies and copies currently checked out, and a student's fine balance, create three booleans: one checking if all copies are checked out, one checking if at least one copy is available, and one checking if the fine balance is exactly zero. Print all three with clear labels.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        int totalCopies = 4;
+        int copiesCheckedOut = 4;
+        double fineBalance = 0.0;
+
+        // TODO: Declare a boolean checking if copiesCheckedOut equals totalCopies.
+        // TODO: Declare a boolean checking if copiesCheckedOut is less than totalCopies.
+        // TODO: Declare a boolean checking if fineBalance equals 0.0.
+        // TODO: Print all three booleans with clear labels.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "For totalCopies = 4, copiesCheckedOut = 4, fineBalance = 0.0, the program should print true (all checked out), false (none available), and true (no fine balance).",
+      conceptsTested: ["comparison operators", "variable declaration"],
+      difficulty: "beginner",
+    },
+  ],
+
+  "module-2-comparison-operators": [
+    {
+      id: "module-2-comparison-operators-practice-2",
+      title: "Compare Two Club Sizes",
+      instructions:
+        "Given the member counts of two clubs, print the results of all six comparison operators applied between them, each with a clear label.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        int clubASize = 24;
+        int clubBSize = 18;
+
+        // TODO: Print the result of clubASize == clubBSize, with a label.
+        // TODO: Print the result of clubASize != clubBSize, with a label.
+        // TODO: Print the result of clubASize < clubBSize, with a label.
+        // TODO: Print the result of clubASize > clubBSize, with a label.
+        // TODO: Print the result of clubASize <= clubBSize, with a label.
+        // TODO: Print the result of clubASize >= clubBSize, with a label.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "For clubASize = 24 and clubBSize = 18, the program should print: false, true, false, true, false, true (in that order).",
+      conceptsTested: ["comparison operators"],
+      difficulty: "beginner",
+    },
+  ],
+
+  "module-2-logical-operators": [
+    {
+      id: "module-2-logical-operators-practice-2",
+      title: "Combine Event Entry Rules",
+      instructions:
+        "An event requires a student to have a ticket AND (be on the guest list OR be a club officer). Create booleans for hasTicket, isOnGuestList, and isClubOfficer, combine the guest-list/officer check with ||, then combine that result with hasTicket using &&, and print the final entry decision.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        boolean hasTicket = true;
+        boolean isOnGuestList = false;
+        boolean isClubOfficer = true;
+
+        // TODO: Declare a boolean qualifiesByList: isOnGuestList OR isClubOfficer.
+        // TODO: Declare a boolean canEnter: hasTicket AND qualifiesByList.
+        // TODO: Print canEnter with a clear label.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "For hasTicket = true, isOnGuestList = false, isClubOfficer = true, the program should print that the student CAN enter (true).",
+      conceptsTested: ["logical AND (&&)", "comparison operators"],
+      difficulty: "intermediate",
+    },
+  ],
+
+  "module-2-nested-conditions": [
+    {
+      id: "module-2-nested-conditions-practice-2",
+      title: "Course Registration Approval",
+      instructions:
+        "A course registration is approved only if: the course has open seats, AND (nested inside that check) the student has completed the prerequisite. If seats are open but the prerequisite is missing, print a specific message. If there are no open seats at all, print a different message - the prerequisite should never even be checked in that case.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        boolean hasOpenSeats = true;
+        boolean hasPrerequisite = false;
+
+        // TODO: Write a nested if-else:
+        //   If hasOpenSeats is true:
+        //     If hasPrerequisite is true, print "Registration approved."
+        //     Otherwise, print "Cannot register - prerequisite not completed."
+        //   If hasOpenSeats is false, print "No open seats available."
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: 'For hasOpenSeats = true and hasPrerequisite = false, the program should print "Cannot register - prerequisite not completed."',
+      conceptsTested: ["if-else"],
+      difficulty: "intermediate",
+    },
+  ],
+
+  "module-2-switch": [
+    {
+      id: "module-2-switch-practice-2",
+      title: "Assign a Locker Zone by Grade",
+      instructions:
+        "Given an int gradeLevel (9 to 12), use a switch statement to print a locker zone: 9 -> \"Zone A\", 10 -> \"Zone B\", 11 -> \"Zone C\", 12 -> \"Zone D\". For any other grade, print \"No locker zone assigned\". Remember to use break after each case.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        int gradeLevel = 11;
+
+        // TODO: Write a switch statement on gradeLevel.
+        // 9 -> "Zone A", 10 -> "Zone B", 11 -> "Zone C", 12 -> "Zone D"
+        // default -> "No locker zone assigned"
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: 'For gradeLevel = 11, the program should print "Zone C". For gradeLevel = 7, it should print "No locker zone assigned".',
+      conceptsTested: ["switch", "break"],
+      difficulty: "beginner",
+    },
+  ],
+
+  "module-2-do-while-loops": [
+    {
+      id: "module-2-do-while-loops-practice-2",
+      title: "Issue at Least One Library Card",
+      instructions:
+        "A new library branch has issued 0 cards and can issue up to 4. Use a do-while loop to issue at least one card (even though, here, capacity technically allows more), printing \"Issued card #X\" each time, continuing while there is still room. After the loop, print the final count issued.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        int cardsIssued = 0;
+        int maxCards = 4;
+
+        // TODO: Use a do-while loop.
+        // Each time, add 1 to cardsIssued and print "Issued card #X".
+        // Continue while cardsIssued < maxCards.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+        System.out.println("Final cards issued: " + cardsIssued);
+    }
+}`,
+      expectedBehaviour: 'The program should print "Issued card #1" through "Issued card #4", followed by "Final cards issued: 4".',
+      conceptsTested: ["while loop", "manual counters"],
+      difficulty: "intermediate",
+    },
+  ],
+
+  "module-2-break": [
+    {
+      id: "module-2-break-practice-2",
+      title: "Find the First Overdue Book",
+      instructions:
+        "Given an array of ints representing days overdue for several books (0 means not overdue), use a for loop with break to find and print the first book that is overdue (days overdue greater than 0), then stop searching immediately. If none are overdue, print a message saying nothing is overdue.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        int[] daysOverdue = {0, 0, 5, 2, 0};
+        boolean foundOverdue = false;
+
+        // TODO: Use a for loop to check each value.
+        // If a value is greater than 0, print "First overdue book is X days late"
+        // (X = the value), set foundOverdue to true, then break.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+        if (!foundOverdue) {
+            System.out.println("Nothing is overdue!");
+        }
+    }
+}`,
+      expectedBehaviour: 'For {0, 0, 5, 2, 0}, the program should print "First overdue book is 5 days late" and stop, without mentioning the 2.',
+      conceptsTested: ["for loop", "if-else", "arrays", "break"],
+      difficulty: "intermediate",
+    },
+  ],
+
+  "module-2-continue": [
+    {
+      id: "module-2-continue-practice-2",
+      title: "Skip Cancelled Events in a Schedule",
+      instructions:
+        "Given an array of event statuses (\"ON\" for scheduled, \"OFF\" for cancelled), use a for loop with continue to skip printing anything for cancelled events, and print \"Event #X is scheduled\" (X = position, starting at 1) only for scheduled events. After the loop, print the total number of scheduled events.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        String[] eventStatus = {"ON", "OFF", "ON", "ON", "OFF"};
+        int scheduledCount = 0;
+
+        // TODO: Use a for loop over eventStatus.
+        // If eventStatus[i] is "OFF", use continue to skip it.
+        // Otherwise, print "Event #X is scheduled" (X = i + 1)
+        // and add 1 to scheduledCount.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+        System.out.println("Total scheduled: " + scheduledCount);
+    }
+}`,
+      expectedBehaviour: 'For {"ON", "OFF", "ON", "ON", "OFF"}, the program should print "Event #1 is scheduled", "Event #3 is scheduled", and "Event #4 is scheduled", followed by "Total scheduled: 3".',
+      conceptsTested: ["for loop", "if-else", "arrays", "continue"],
+      difficulty: "intermediate",
+    },
+  ],
+
   "module-2-conditions": [
     {
       id: "module-2-conditions-practice-2",
