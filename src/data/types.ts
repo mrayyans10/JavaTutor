@@ -187,3 +187,19 @@ export type TutorChatMessage = {
   content: string;
   timestamp: string;
 };
+
+/* ------------------------------ Tutor responses ---------------------------- */
+
+/**
+ * The single response shape returned by the tutor chat API. The frontend
+ * routes each response based on `type`:
+ * - "chat" / "hint": rendered as a message inside the Tutor Chat panel.
+ *   These must never contain a full Java program the student is expected
+ *   to submit.
+ * - "exercise": never shown in the chat panel. The `exercise` payload
+ *   replaces the Exercise Panel's active exercise directly.
+ */
+export type TutorResponse =
+  | { type: "chat"; message: string; source: "ai" | "mock" }
+  | { type: "hint"; message: string; source: "ai" | "mock" }
+  | { type: "exercise"; exercise: Exercise; message?: string; source: "ai" | "mock" };

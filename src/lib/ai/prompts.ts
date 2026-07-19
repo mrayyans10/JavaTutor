@@ -15,7 +15,8 @@ Rules you must always follow:
 - Never introduce concepts from later modules that the student has not reached yet.
 - Never claim you executed or compiled the student's code - you can only review it as text. If your feedback is based only on reading the code, say so (e.g. "Based on reviewing your code...").
 - Stay focused on Java and the School Activity Management System course project. Politely decline unrelated or unsafe requests and steer back to the lesson.
-- Accept that there can be more than one correct way to solve a problem. Do not penalize a solution just because it differs from a sample solution, as long as it correctly satisfies the exercise.`;
+- Accept that there can be more than one correct way to solve a problem. Do not penalize a solution just because it differs from a sample solution, as long as it correctly satisfies the exercise.
+- NEVER write out a full Java program, class, or exercise starter code inside a normal chat reply. Chat replies are for explanations, hints, reasoning and feedback only - short inline snippets (a single line or expression) are fine, but a runnable program belongs in the Exercise Panel, not the chat.`;
 
 export function buildLessonContext(lesson: Lesson): string {
   return `Current lesson: "${lesson.title}" (module ${lesson.moduleId}).
@@ -92,18 +93,20 @@ export function buildChatMessages(
   ];
 }
 
+/**
+ * NOTE: "another-example" and "another-exercise" are intentionally not
+ * handled here - they never go through the free-form chat path. See
+ * buildExerciseGenerationPrompt() below, which is used instead so the
+ * frontend can guarantee a full Java program never lands in the chat panel.
+ */
 function describeActionInstruction(action: FollowUpAction): string {
   switch (action) {
     case "explain-again":
       return "The student wants the current concept explained again, in a different way than before. Keep it short and clear.";
     case "simpler-explanation":
       return "The student is confused. Give an even simpler explanation than before, using a very basic everyday comparison, and check understanding with one small question.";
-    case "another-example":
-      return "Give the student one additional worked Java example of the current concept, different from the lesson's main example, ideally still related to the School Activity Management System. Briefly explain it.";
     case "hint":
       return "The student wants a hint for their current exercise, without the full solution. Give one focused, encouraging hint.";
-    case "another-exercise":
-      return "Give the student a new short practice exercise on the current concept, different from the one already provided, with brief instructions. Do not give starter code with the full solution filled in.";
     case "more-detail":
       return "The student wants to go deeper into the current concept. Share one useful additional detail or nuance appropriate for a beginner, without introducing unrelated advanced topics.";
     case "next-topic":
@@ -111,4 +114,45 @@ function describeActionInstruction(action: FollowUpAction): string {
     default:
       return "";
   }
+}
+
+/**
+ * Builds the prompt used to generate a brand new practice exercise (for the
+ * "Show another example" and "Give me another exercise" actions). The AI
+ * must respond with structured JSON only - never plain markdown - so the
+ * frontend can load the result straight into the Exercise Panel instead of
+ * the chat.
+ */
+export function buildExerciseGenerationPrompt(
+  lesson: Lesson,
+  practiceNumber: number,
+  previousTitles: string[]
+): string {
+  const difficulty = practiceNumber <= 2 ? "beginner" : practiceNumber === 3 ? "intermediate" : "advanced";
+
+  return `${buildLessonContext(lesson)}
+
+The student clicked a button asking for another practice exercise on this same lesson's concept (this will be practice attempt #${practiceNumber} for this lesson in this session).
+
+Exercises already given in this session (do not repeat these, invent a new scenario): ${
+    previousTitles.length > 0 ? previousTitles.join(", ") : "(none yet)"
+  }
+
+Generate ONE new exercise that:
+- Tests the same concept(s) as this lesson - do not introduce concepts from later modules.
+- Is a genuinely new problem, not a reworded version of a previous one.
+- Where it fits naturally, relates to the School Activity Management System (students, teachers, courses, clubs, attendance, marks, assignments, events, library books). A small standalone example is fine if that teaches the concept more clearly.
+- Has a difficulty of roughly "${difficulty}" (exercises should get gradually harder as practiceNumber increases).
+- Includes starter code with clear "// TODO" comments and "/* STUDENT CODE STARTS HERE */" / "/* STUDENT CODE ENDS HERE */" markers around the blank area the student should fill in, following the exact same style as this lesson's syntax examples.
+- Does NOT include the finished solution in the starter code.
+
+Respond with ONLY a single valid JSON object (no markdown fences, no extra commentary) with exactly this shape:
+{
+  "title": string,
+  "instructions": string,
+  "starterCode": string,
+  "expectedBehaviour": string,
+  "concepts": string[],
+  "difficulty": "beginner" | "intermediate" | "advanced"
+}`;
 }

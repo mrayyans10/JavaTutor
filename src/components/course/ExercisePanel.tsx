@@ -12,6 +12,8 @@ type ExercisePanelProps = {
   lessonId: string;
   exercise: Exercise;
   onRequestAnotherExercise?: () => void;
+  onResult?: (result: EvaluationResult) => void;
+  isCompleted?: boolean;
 };
 
 const DIFFICULTY_STYLES: Record<Exercise["difficulty"], string> = {
@@ -20,7 +22,13 @@ const DIFFICULTY_STYLES: Record<Exercise["difficulty"], string> = {
   advanced: "bg-rose-100 text-rose-700",
 };
 
-export function ExercisePanel({ lessonId, exercise, onRequestAnotherExercise }: ExercisePanelProps) {
+export function ExercisePanel({
+  lessonId,
+  exercise,
+  onRequestAnotherExercise,
+  onResult,
+  isCompleted,
+}: ExercisePanelProps) {
   const { recordExerciseAttempt } = useProgress();
   const [result, setResult] = useState<EvaluationResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,6 +65,7 @@ export function ExercisePanel({ lessonId, exercise, onRequestAnotherExercise }: 
         passed: data.result.correctness === "correct",
         feedbackSummary: data.result.suggestedNextAction,
       });
+      onResult?.(data.result);
     } catch (error) {
       console.error(error);
       setErrorMessage(
@@ -71,9 +80,16 @@ export function ExercisePanel({ lessonId, exercise, onRequestAnotherExercise }: 
     <div className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <h3 className="text-lg font-bold text-slate-900">🎯 {exercise.title}</h3>
-        <span className={cn("shrink-0 rounded-full px-3 py-1 text-xs font-semibold", DIFFICULTY_STYLES[exercise.difficulty])}>
-          {exercise.difficulty}
-        </span>
+        <div className="flex shrink-0 items-center gap-2">
+          {isCompleted && (
+            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+              ✓ Completed
+            </span>
+          )}
+          <span className={cn("rounded-full px-3 py-1 text-xs font-semibold", DIFFICULTY_STYLES[exercise.difficulty])}>
+            {exercise.difficulty}
+          </span>
+        </div>
       </div>
 
       <p className="text-sm leading-relaxed text-slate-700">{exercise.instructions}</p>
@@ -106,13 +122,15 @@ export function ExercisePanel({ lessonId, exercise, onRequestAnotherExercise }: 
 
       <EvaluationPanel result={result} isLoading={isSubmitting} />
 
-      {result && result.correctness !== "correct" && onRequestAnotherExercise && (
+      {result && onRequestAnotherExercise && (
         <button
           type="button"
           onClick={onRequestAnotherExercise}
           className="self-start text-sm font-medium text-orange-600 hover:text-orange-700"
         >
-          Not ready to resubmit? Try a fresh exercise instead →
+          {result.correctness === "correct"
+            ? "Want more practice? Get another exercise →"
+            : "Not ready to resubmit? Try a fresh exercise instead →"}
         </button>
       )}
 

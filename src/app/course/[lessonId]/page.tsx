@@ -39,7 +39,8 @@ export default async function LessonPage({ params }: PageProps) {
 
   return (
     <CourseLayout currentLessonId={lessonId}>
-      <LessonViewer lesson={lesson} />
+      {/* key forces a fresh LessonViewer (chat history + exercise session) per lesson. */}
+      <LessonViewer lesson={lesson} key={lesson.id} />
     </CourseLayout>
   );
 }

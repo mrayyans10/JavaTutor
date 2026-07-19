@@ -1,5 +1,6 @@
 import OpenAI from "openai";
-import type { EvaluationResult } from "@/data/types";
+import type { EvaluationResult, Exercise } from "@/data/types";
+import { generateId } from "@/lib/utils";
 
 const DEFAULT_MODEL = process.env.AI_MODEL || "gpt-4o-mini";
 
@@ -56,6 +57,39 @@ export function parseEvaluationResponse(raw: string): Omit<EvaluationResult, "so
       conceptToReview: parsed.conceptToReview ?? "this lesson",
       suggestedNextAction: parsed.suggestedNextAction ?? "Keep practicing this concept.",
       errorType: parsed.errorType ?? "none",
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Parses the AI's exercise-generation JSON response into an Exercise. This
+ * is the ONLY place an AI-generated Java program is allowed to enter the
+ * app - it always becomes the Exercise Panel's active exercise, and is
+ * never rendered inside the Tutor Chat.
+ */
+export function parseExerciseResponse(raw: string, lessonId: string): Exercise | null {
+  const cleaned = raw
+    .trim()
+    .replace(/^```(json)?/i, "")
+    .replace(/```$/, "")
+    .trim();
+
+  try {
+    const parsed = JSON.parse(cleaned);
+    if (!parsed.title || !parsed.starterCode || !parsed.instructions) return null;
+
+    return {
+      id: generateId(`${lessonId}-ai-exercise`),
+      title: String(parsed.title),
+      instructions: String(parsed.instructions),
+      starterCode: String(parsed.starterCode),
+      expectedBehaviour: String(parsed.expectedBehaviour ?? "Compare your program's output with the instructions above."),
+      conceptsTested: Array.isArray(parsed.concepts) ? parsed.concepts.map(String) : [],
+      difficulty: ["beginner", "intermediate", "advanced"].includes(parsed.difficulty)
+        ? parsed.difficulty
+        : "intermediate",
     };
   } catch {
     return null;

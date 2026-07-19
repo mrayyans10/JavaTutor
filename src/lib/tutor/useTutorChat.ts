@@ -1,11 +1,17 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { TutorChatMessage } from "@/data/types";
+import type { TutorChatMessage, TutorResponse } from "@/data/types";
 import type { FollowUpAction } from "@/lib/tutor/actions";
 import { FOLLOW_UP_ACTION_LABELS } from "@/lib/tutor/actions";
 import { generateId } from "@/lib/utils";
 
+/**
+ * Handles chat-only tutor interactions: explanations, hints, reasoning and
+ * feedback. Never used for "another-example" / "another-exercise" - those
+ * are handled by useExerciseSession instead, so a full Java program can
+ * never end up rendered inside the chat panel.
+ */
 export function useTutorChat(lessonId: string) {
   const [messages, setMessages] = useState<TutorChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +44,16 @@ export function useTutorChat(lessonId: string) {
 
         if (!response.ok) throw new Error(`Chat request failed (${response.status})`);
 
-        const data: { reply: string } = await response.json();
+        const data: TutorResponse = await response.json();
+        const replyText =
+          data.type === "chat" || data.type === "hint"
+            ? data.message
+            : "I generated something for you - check the Exercise Panel below.";
+
         const tutorMessage: TutorChatMessage = {
           id: generateId("msg"),
           role: "tutor",
-          content: data.reply,
+          content: replyText,
           timestamp: new Date().toISOString(),
         };
         setMessages((prev) => [...prev, tutorMessage]);
@@ -66,5 +77,17 @@ export function useTutorChat(lessonId: string) {
   const sendAction = useCallback((action: FollowUpAction) => send("", action), [send]);
   const sendMessage = useCallback((content: string) => send(content), [send]);
 
-  return { messages, isLoading, sendAction, sendMessage };
+  /**
+   * Adds a short, client-authored note to the chat (e.g. acknowledging a
+   * new exercise was loaded). This never comes from the AI, so it can
+   * never accidentally contain a Java program.
+   */
+  const addSystemNote = useCallback((content: string) => {
+    setMessages((prev) => [
+      ...prev,
+      { id: generateId("msg"), role: "tutor", content, timestamp: new Date().toISOString() },
+    ]);
+  }, []);
+
+  return { messages, isLoading, sendAction, sendMessage, addSystemNote };
 }
