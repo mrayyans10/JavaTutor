@@ -22,6 +22,12 @@ export const runtime = "nodejs";
 type EvaluateRequestBody = {
   mode: "evaluate";
   lessonId: string;
+  /**
+   * The exercise CURRENTLY displayed in the Exercise Panel. This may be a
+   * dynamically generated practice exercise, not the lesson's original
+   * exercise - it must always be used as the source of truth for review.
+   */
+  exercise?: Exercise;
   code: string;
   compilerOutput?: string;
 };
@@ -73,6 +79,19 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ error: "Unsupported mode." }, { status: 400 });
 }
 
+function isValidExercisePayload(value: unknown): value is Exercise {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Partial<Exercise>;
+  return (
+    typeof candidate.id === "string" &&
+    typeof candidate.title === "string" &&
+    typeof candidate.instructions === "string" &&
+    typeof candidate.starterCode === "string" &&
+    typeof candidate.expectedBehaviour === "string" &&
+    Array.isArray(candidate.conceptsTested)
+  );
+}
+
 async function handleEvaluate(lessonId: string, body: EvaluateRequestBody) {
   const lesson = getFullLesson(lessonId);
   if (!lesson) {
@@ -82,9 +101,14 @@ async function handleEvaluate(lessonId: string, body: EvaluateRequestBody) {
     return NextResponse.json({ error: "Missing 'code' field." }, { status: 400 });
   }
 
+  // The exercise CURRENTLY shown in the Exercise Panel is the single source
+  // of truth for review - never fall back to the lesson's original exercise
+  // unless the client genuinely didn't send one (e.g. an older client build).
+  const activeExercise: Exercise = isValidExercisePayload(body.exercise) ? body.exercise : lesson.exercise;
+
   const mockResult = evaluateSubmissionWithMockEvaluator({
     lesson,
-    exercise: lesson.exercise,
+    exercise: activeExercise,
     submittedCode: body.code,
     compilerOutput: body.compilerOutput,
   });
@@ -94,7 +118,7 @@ async function handleEvaluate(lessonId: string, body: EvaluateRequestBody) {
   }
 
   try {
-    const prompt = buildEvaluationPrompt(lesson, lesson.exercise, body.code, body.compilerOutput);
+    const prompt = buildEvaluationPrompt(lesson, activeExercise, body.code, body.compilerOutput);
     const raw = await requestChatCompletion([
       { role: "system", content: TUTOR_SYSTEM_PROMPT },
       { role: "user", content: prompt },

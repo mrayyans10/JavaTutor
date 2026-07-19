@@ -35,10 +35,23 @@ export function buildEvaluationPrompt(
 ): string {
   return `${buildLessonContext(lesson)}
 
-Exercise: "${exercise.title}"
+CURRENT EXERCISE (this is the ONLY exercise you are evaluating - the student may have
+requested a new practice exercise since the lesson first loaded, so this may differ
+from whatever exercise this lesson originally shipped with):
+Exercise ID: ${exercise.id}
+Title: "${exercise.title}"
 Instructions: ${exercise.instructions}
 Expected behaviour: ${exercise.expectedBehaviour}
 Concepts this exercise tests: ${exercise.conceptsTested.join(", ")}
+Starter code given to the student:
+\`\`\`java
+${exercise.starterCode}
+\`\`\`
+
+Evaluate the student's submission ONLY against the CURRENT EXERCISE above. Do not refer
+to, or judge the submission against, any other exercise, the lesson's original exercise,
+a cached/earlier exercise, or anything from prior conversation history - use only the
+CURRENT EXERCISE's title, instructions, expected behaviour and concepts listed above.
 
 Evaluate the student's submission below using this exact order:
 1. Check whether the student attempted the required concept(s).

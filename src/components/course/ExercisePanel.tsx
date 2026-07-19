@@ -47,6 +47,9 @@ export function ExercisePanel({
         body: JSON.stringify({
           mode: "evaluate",
           lessonId,
+          // Always send the exercise currently shown in this panel - never
+          // let the server fall back to the lesson's original exercise.
+          exercise,
           code: payload.code,
           compilerOutput: payload.compilerOutput,
         }),
