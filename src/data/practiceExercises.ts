@@ -268,6 +268,285 @@ export const practiceExerciseBank: Record<string, Exercise[]> = {
     },
   ],
 
+  "module-1-what-is-java": [
+    {
+      id: "module-1-what-is-java-practice-2",
+      title: "Print a Two-Line Fact About Java",
+      instructions:
+        "Write your own program that prints one fact about Java on the first line (e.g. that it runs on many kinds of computers), and a sentence about a type of app that might use Java on the second line.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        // TODO: Print a fact about Java on the first line.
+        // TODO: Print a sentence about a type of app that could use Java.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "The program should print two lines of text you wrote yourself, with no error messages.",
+      conceptsTested: ["System.out.println", "class structure"],
+      difficulty: "beginner",
+    },
+    {
+      id: "module-1-what-is-java-practice-3",
+      title: "Print a Three-Line Introduction",
+      instructions:
+        "Write a program that introduces yourself as a new Java student in exactly three lines: your name, your grade level, and one thing you're curious to learn.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        // TODO: Print your name, your grade level, and something
+        // you're curious to learn, each on its own line.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "The program should print exactly three lines of text you wrote yourself, with no error messages.",
+      conceptsTested: ["System.out.println", "class structure"],
+      difficulty: "beginner",
+    },
+  ],
+
+  "module-1-installing-java": [
+    {
+      id: "module-1-installing-java-practice-2",
+      title: "Print a Setup Checklist",
+      instructions:
+        "Write a program that prints three lines confirming your setup: the tool you used (online compiler or installed JDK), whether it ran successfully, and today's date. Run it in your chosen environment and paste the output alongside your code.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        // TODO: Print which tool you used.
+        // TODO: Print whether the program ran successfully.
+        // TODO: Print today's date.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "The program should print three lines confirming your setup, with no error messages when run.",
+      conceptsTested: ["System.out.println", "class structure"],
+      difficulty: "beginner",
+    },
+  ],
+
+  "module-1-main-method": [
+    {
+      id: "module-1-main-method-practice-2",
+      title: "Fix Another Broken Main Method",
+      instructions:
+        "The main method below has a different mistake in its signature. Find it and fix it so the program compiles and runs correctly.",
+      starterCode: `public class Main {
+
+    // TODO: Something is misspelled in this signature. Find and fix it.
+    public static void mainn(String[] args) {
+
+        System.out.println("Course registration system starting...");
+        System.out.println("Ready to register students.");
+    }
+}`,
+      expectedBehaviour: 'Once fixed, the program should compile and print "Course registration system starting..." followed by "Ready to register students."',
+      conceptsTested: ["main method", "class structure"],
+      difficulty: "beginner",
+    },
+    {
+      id: "module-1-main-method-practice-3",
+      title: "Write a Main Method With No Given Signature",
+      instructions:
+        "This time, no signature is given at all - only the body. Write the complete, correctly-worded main method signature yourself, wrapping the given body.",
+      starterCode: `public class Main {
+
+    // TODO: Write the correct main method signature here, then
+    // put the two print statements below inside its body.
+
+
+
+    /* STUDENT CODE STARTS HERE */
+
+    System.out.println("Marks entry system ready.");
+    System.out.println("Awaiting teacher input.");
+
+    /* STUDENT CODE ENDS HERE */
+}`,
+      expectedBehaviour: 'The program should compile with a correctly-written main method and print "Marks entry system ready." followed by "Awaiting teacher input."',
+      conceptsTested: ["main method", "class structure"],
+      difficulty: "intermediate",
+    },
+  ],
+
+  "module-1-printing-output": [
+    {
+      id: "module-1-printing-output-practice-2",
+      title: "Build a Single-Line Receipt",
+      instructions:
+        "Using only print (not println) for the first three pieces, build one line that reads exactly: \"Item: Notebook | Qty: 2 | Total: $6\" by printing each piece separately, then end with a println for a closing line \"Thank you!\" on its own line.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        // TODO: Use print (not println) three times to build:
+        // "Item: Notebook | Qty: 2 | Total: $6" all on one line.
+        // TODO: Then use println to print "Thank you!" on its own line.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: 'The program should print "Item: Notebook | Qty: 2 | Total: $6" on one line (built from multiple print calls), followed by "Thank you!" on the next line.',
+      conceptsTested: ["System.out.println", "escape sequences"],
+      difficulty: "intermediate",
+    },
+  ],
+
+  "module-1-comments": [
+    {
+      id: "module-1-comments-practice-2",
+      title: "Comment an Attendance Threshold",
+      instructions:
+        "The program below has no comments. Add a single-line comment explaining why 90 was chosen as the attendance threshold, and a multi-line comment above the final line explaining what the printed message means for the student.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        // TODO: Add a single-line comment above this explaining why 90 was chosen.
+        int attendanceThreshold = 90;
+
+        int studentAttendance = 94;
+
+        // TODO: Add a multi-line comment above this line explaining what
+        // the printed message means for the student.
+        System.out.println("Attendance " + studentAttendance + "% meets the " + attendanceThreshold + "% requirement.");
+    }
+}`,
+      expectedBehaviour: "The output should stay the same, but the code should now include one single-line comment and one multi-line comment, each explaining real reasoning.",
+      conceptsTested: ["comments", "System.out.println"],
+      difficulty: "beginner",
+    },
+  ],
+
+  "module-1-type-conversion": [
+    {
+      id: "module-1-type-conversion-practice-2",
+      title: "Convert a Letter Grade to Its Code and Back",
+      instructions:
+        "Store a char letter grade. Convert it to an int to see its underlying character code, print both. Then store a double library fine amount and cast it down to an int, printing both values.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        // TODO: Declare a char letterGrade and print it.
+        // TODO: Convert it to an int (widening) and print the code.
+        // TODO: Declare a double fineAmount with a decimal value and print it.
+        // TODO: Cast fineAmount to an int and print that too.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "The program should print the letter grade, its numeric character code, the decimal fine amount, and the fine amount cast down to a whole number.",
+      conceptsTested: ["int", "double"],
+      difficulty: "intermediate",
+    },
+  ],
+
+  "module-1-constants": [
+    {
+      id: "module-1-constants-practice-2",
+      title: "Replace a Club Capacity Magic Number",
+      instructions:
+        "The program below uses the number 25 directly in two places to represent a club's maximum capacity. Rewrite it to declare a final int constant named MAX_CAPACITY set to 25, and use it everywhere the number 25 currently appears.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        int currentMembers = 18;
+
+        // TODO: Declare a final int constant named MAX_CAPACITY set to 25.
+        // TODO: Replace both uses of the number 25 below with MAX_CAPACITY.
+
+        System.out.println("Maximum capacity: " + 25);
+        System.out.println("Spots remaining: " + (25 - currentMembers));
+    }
+}`,
+      expectedBehaviour: "The output should stay exactly the same, but the code should no longer contain the raw number 25 anywhere except inside the MAX_CAPACITY constant's declaration.",
+      conceptsTested: ["final constants", "int"],
+      difficulty: "beginner",
+    },
+  ],
+
+  "module-1-operators": [
+    {
+      id: "module-1-operators-practice-2",
+      title: "Split a Prize Pool Evenly",
+      instructions:
+        "A club has a prize pool of 47 dollars to split evenly among 5 winners. Use / to calculate how much each winner gets (whole dollars only) and % to calculate how much money is left over undistributed. Print both values clearly labeled.",
+      starterCode: `public class Main {
+
+    public static void main(String[] args) {
+
+        int prizePool = 47;
+        int numberOfWinners = 5;
+
+        // TODO: Calculate how much each winner gets using / and print it.
+        // TODO: Calculate the leftover amount using % and print it.
+
+
+
+        /* STUDENT CODE STARTS HERE */
+
+
+
+
+        /* STUDENT CODE ENDS HERE */
+
+    }
+}`,
+      expectedBehaviour: "With a prize pool of 47 split among 5 winners, each winner should get 9 dollars, with 2 dollars left over.",
+      conceptsTested: ["int"],
+      difficulty: "intermediate",
+    },
+  ],
+
   "module-2-conditions": [
     {
       id: "module-2-conditions-practice-2",

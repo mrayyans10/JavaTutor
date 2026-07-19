@@ -25,6 +25,7 @@ const CONCEPT_PATTERNS: Record<string, RegExp> = {
   "while loop": /\bwhile\s*\(/,
   "loop conditions": /\bwhile\s*\(/,
   "manual counters": /\+\+|\+=|=\s*\w+\s*\+\s*1/,
+  "escape sequences": /\\[nt"]/,
   "string concatenation": /\+/,
   "touppercase()": /toUpperCase\(/i,
   "length()": /\.length\(\)/,
