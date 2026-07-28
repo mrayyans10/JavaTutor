@@ -213,7 +213,7 @@ async function handleChat(lessonId: string, body: ChatRequestBody): Promise<Next
   if (!isAIConfigured()) {
     return NextResponse.json({
       type: responseType,
-      message: buildCannedTutorReply(body.action, lesson.title),
+      message: buildCannedTutorReply(body.action, lesson.title, body.message),
       source: "mock",
     });
   }
@@ -223,14 +223,14 @@ async function handleChat(lessonId: string, body: ChatRequestBody): Promise<Next
     const reply = await requestChatCompletion(messages);
     return NextResponse.json({
       type: responseType,
-      message: reply || buildCannedTutorReply(body.action, lesson.title),
+      message: reply || buildCannedTutorReply(body.action, lesson.title, body.message),
       source: "ai",
     });
   } catch (error) {
     console.error("AI chat request failed, falling back to canned reply:", error);
     return NextResponse.json({
       type: responseType,
-      message: buildCannedTutorReply(body.action, lesson.title),
+      message: buildCannedTutorReply(body.action, lesson.title, body.message),
       source: "mock",
     });
   }
@@ -241,7 +241,11 @@ async function handleChat(lessonId: string, body: ChatRequestBody): Promise<Next
  * (e.g. no OPENAI_API_KEY set), so the tutor chat remains fully functional
  * in the MVP without any external dependency.
  */
-function buildCannedTutorReply(action: FollowUpAction | undefined, lessonTitle: string): string {
+function buildCannedTutorReply(
+  action: FollowUpAction | undefined,
+  lessonTitle: string,
+  freeformMessage?: string
+): string {
   switch (action) {
     case "explain-again":
       return `Let's go over **${lessonTitle}** again. Scroll back up to the "Simple explanation" section above and re-read it slowly, one bullet at a time. Which part feels the most unclear - the *what*, the *why*, or the *syntax*? Tell me and I'll focus there.`;
@@ -254,6 +258,45 @@ function buildCannedTutorReply(action: FollowUpAction | undefined, lessonTitle: 
     case "next-topic":
       return `Nice work finishing this lesson! When you're ready, use the sidebar (or the "Continue Learning" button on your dashboard) to move to the next topic.`;
     default:
-      return `Based on reviewing your question, I'd suggest re-reading the "Simple explanation" and "Worked Java example" sections of this lesson first. If something specific is still unclear, tell me exactly which line or word is confusing you, and I'll help from there. (Note: an AI provider is not configured yet, so this is a scripted response rather than a fully dynamic one - see the README for how to enable full AI tutoring.)`;
+      return buildCannedFreeformReply(freeformMessage ?? "", lessonTitle);
   }
+}
+
+/**
+ * Without an AI provider, we can't truly understand a freely-typed
+ * question - but simple keyword matching lets us give a noticeably more
+ * relevant scripted reply than one single generic fallback for every
+ * possible question, which previously made the chat feel broken/repetitive.
+ */
+function buildCannedFreeformReply(message: string, lessonTitle: string): string {
+  const text = message.toLowerCase();
+
+  const asksForSample = /\b(sample|example|solution|answer key|full code|complete code|show me the code)\b/.test(
+    text
+  );
+  const mentionsError = /\b(error|doesn'?t work|not working|bug|broke|broken|wrong|exception|crash)\b/.test(text);
+  const asksForHint = /\b(hint|stuck|clue|nudge|help me)\b/.test(text);
+  const isConfused =
+    /\bconfus\w*\b|\bdon'?t understand\b|\bdont understand\b|\blost\b|\bunclear\b|\bmakes no sense\b|\bnot clear\b/.test(
+      text
+    );
+  const asksWhy = /\bwhy\b/.test(text);
+
+  if (asksForSample) {
+    return `I can't paste a full Java program directly into this chat - working code always goes through the Exercise Panel so you get real starter code plus proper evaluation, not just text to copy. Click **"Show another example"** for a worked example, or **"Give me another exercise"** for a new practice problem, below the lesson - a fresh one will load straight into the panel for you to try.`;
+  }
+  if (mentionsError) {
+    return `To help with an error, paste your full code AND the exact error message into the "Your Java code" and "Compiler errors or program output" boxes in the Exercise Panel, then click "Submit for review" - that gives a structured review of exactly what's wrong. I can't reliably diagnose an error from a description alone here in chat.`;
+  }
+  if (asksForHint) {
+    return `Here's a general hint: re-read the exercise's "Expected behaviour" line, then go through your code one statement at a time and check whether it actually produces that. The first mismatch you find is usually the key issue. For a hint based on your actual submitted code, click "Submit for review" first, then ask again.`;
+  }
+  if (isConfused) {
+    return `No worries - let's slow down. Re-read the "Simple explanation" section above one bullet at a time, then check the "Real-world analogy" - it's often the fastest way to make a new idea click. Tell me exactly which sentence or line of code is the confusing part, and I'll focus there.`;
+  }
+  if (asksWhy) {
+    return `Good question. The "Why it is needed" part of the "Simple explanation" section above answers exactly this for **${lessonTitle}**. If your question is about a specific line of code instead, tell me which line and I'll point you to the matching part of the "Line-by-line walkthrough".`;
+  }
+
+  return `Based on reviewing your question, I'd suggest re-reading the "Simple explanation" and "Worked Java example" sections of this lesson first. If something specific is still unclear, tell me exactly which line or word is confusing you, and I'll help from there. (Note: an AI provider is not configured yet, so this is a scripted response rather than a fully dynamic one - see the README for how to enable full AI tutoring.)`;
 }
